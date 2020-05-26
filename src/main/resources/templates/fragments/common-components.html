@@ -1,0 +1,87 @@
+<!-- NavBar Content -->
+<titlebar>
+
+</titlebar>
+<navbar>
+    <div class="top-nav-bar">
+        <p class="brandTitle" >Places Reference Application</p>
+        <div class="drop-style">
+            <a class="btn top-nav" href="/">Home</a>
+        </div>
+        <div class="merchant-dropdown drop-style">
+            <a class="btn top-nav">Merchant</a>
+            <div class="dropdown-content">
+                <div class="merchant-dropdown-content" style="border: 1px solid whitesmoke;">
+                    <a href="/?form=getMccCodes"style="color:#61affe;"><b>[GET]</b> Get all codes</a>
+                    <a href="/?form=getMccByCode" style="color:#61affe;"><b>[GET]</b> Get name by code</a>
+                </div>
+            </div>
+        </div>
+        <div class="industries-dropdown drop-style">
+            <a class="btn top-nav">Industry</a>
+            <div class="dropdown-content">
+                <div class="industries-dropdown-content" style="border: 1px solid whitesmoke;">
+                    <a href="/?form=getIndustryCodes" style="color:#61affe;"><b>[GET]</b> Get all codes</a>
+                    <a href="/?form=getIndustryByCode" style="color:#61affe;"><b>[GET]</b> Get name by code</a>
+                </div>
+            </div>
+        </div>
+        <div class="places-dropdown drop-style">
+            <a class="btn top-nav">Places</a>
+            <div class="dropdown-content">
+                <div class="places-dropdown-content" style="border: 1px solid whitesmoke;">
+                    <a href="/?form=getLocationDetails" style="color:#61affe;"><b>[GET]</b> Place details</a>
+                    <a href="/?form=postPlacesSearch" style="color:#49cc90;"><b>[POST]</b> Place Search</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</navbar>
+
+<api-form>
+    <div th:insert="fragments/common-components.html :: navbar"> </div>
+    <form id="api-form" th:action="@{/} + ${requestType}" th:object="${apiModel}">
+        <div class="info-section-header">
+            <h8>Sandbox Base Path: <a>sandbox.api.mastercard.com/location-intelligence/places-locator/</a></h8>
+        </div>
+
+        <div class="info-section">
+            <!-- API Parameter Form -->
+            <div th:insert="fragments/api-forms.html :: ${requestType}"> </div>
+        </div>
+        <div class="submit"
+              th:if="${not #strings.contains(requestType, 'home')}">
+            <!-- submit the form and make the API call -->
+            <button type="submit" class="btn button">Submit</button>
+        </div>
+    </form>
+</api-form>
+
+<api-response>
+    <div th:if="${success} != null or ${error} != null">
+        <div th:if="${error} != null" class="alert alert-warning" id="error-alert" role="alert">
+            <p th:text="${error}">Error message.</p>
+        </div>
+        <div th:if="${success} != null" class="alert alert-success" id="success-alert" role="alert">
+            <p th:text="${success}">Success message!</p>
+        </div>
+
+        <div class="alert" role="alert">
+            <div th:if="${success} != null or ${error} != null">
+                <button class="btn button show" id="show-response">JSON Response</button>
+                <button class="btn button show" id="reload">Reset</button>
+            </div>
+            <!-- Display Response from the API Call -->
+            <div th:if="${success} != null or ${error} != null">
+                <div class="json">
+                    <button class="close" id="close" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button><br>
+                    <div id="response">
+                        <pre th:text="${response}">Response</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</api-response>

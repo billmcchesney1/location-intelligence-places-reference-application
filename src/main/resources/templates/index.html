@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Places Reference Application</title>
+        <link rel="stylesheet" href="../static/css/bootstrap.css" th:href="@{/css/bootstrap.css}"/>
+        <link rel="stylesheet" href="../static/css/form.css" th:href="@{/css/form.css}">
+        <link rel="stylesheet" href="../static/css/application.css" th:href="@{/css/application.css}">
+
+
+        <script type="application/javascript" th:src="@{/js/jquery-3.3.1.min.js}"></script>
+        <link rel="stylesheet" th:href="@{/css/jquery-ui.css}">
+        <script type="application/javascript" th:src="@{/js/jquery-ui.js}"></script>
+        <script type="text/javascript" src="js/application.js" th:src="@{/js/application.js}"></script>
+
+    </head>
+    <body>
+        <div th:insert="fragments/common-components.html :: api-form"></div>
+
+        <!-- Display success or error depending on response -->
+        <div th:insert="fragments/common-components.html :: api-response"> </div>
+    </body>
+</html>

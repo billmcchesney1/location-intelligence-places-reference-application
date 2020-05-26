@@ -1,0 +1,799 @@
+openapi: 3.0.1
+info:
+  title: Location Intelligence Places
+  description: Mastercard DW EDS Location Intelligence Places API
+  contact:
+    name: Location Intelligence Support
+    url: http://api.mastercard.com
+    email: location_intelligence_support@mastercard.com
+  version: 1.0.0
+servers:
+- url: https://api.mastercard.com/location-intelligence/places-locator
+tags:
+- name: merchant-category-code-controller
+  description: Merchant Category Code Controller
+- name: merchant-industry-code-controller
+  description: Merchant Industry Code Controller
+- name: place-controller
+  description: Place Controller
+paths:
+  /merchant-category-codes:
+    get:
+      tags:
+      - merchant-category-code-controller
+      summary: Get all active merchant category codes
+      description: Returns a list of Merchant Category Codes ordered by Merchant Category
+        Code or Merchant Category Name, depending on user input. The list will be
+        ordered by Merchant Category Name by default.
+      operationId: getAllMerchantCategoryCodesUsingGet
+      parameters:
+      - name: limit
+        in: query
+        description: limit
+        schema:
+          type: integer
+          format: int32
+          default: 25
+      - name: offset
+        in: query
+        description: offset
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: sort
+        in: query
+        description: sort
+        schema:
+          type: string
+          default: +merchantCategoryName
+      responses:
+        200:
+          description: Successfully retrieved merchant category codes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageResponse'
+        401:
+          description: You are not authorized to view the resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        403:
+          description: Accessing the resource you were trying to reach is forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      deprecated: false
+  /merchant-category-codes/mcc-codes/{mcc_code}:
+    get:
+      tags:
+      - merchant-category-code-controller
+      summary: Get merchant category code by code
+      description: Get merchant category code by code
+      operationId: getByMccCodeUsingGET
+      parameters:
+      - name: mcc_code
+        in: path
+        description: mcc_code
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: This code represents the category that a merchant location
+            may be under and is supported by most payment providers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MerchantCategoryCode'
+        401:
+          description: You are not authorized to view the resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        403:
+          description: Accessing the resource you were trying to reach is forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Cannot find merchant category code with the provided mcc code
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      deprecated: false
+  /merchant-industry-codes:
+    get:
+      tags:
+      - merchant-industry-code-controller
+      summary: Get all active merchant industry codes
+      description: Returns a list of Merchant Industries ordered by Merchant Industry
+        Codes or Merchant Industry Name depending on user input. The list will be
+        ordered by Merchant Industry Name by default.
+      operationId: getAllIndustryCodesUsingGET
+      parameters:
+      - name: limit
+        in: query
+        description: limit
+        schema:
+          type: integer
+          format: int32
+          default: 25
+      - name: offset
+        in: query
+        description: offset
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: sort
+        in: query
+        description: sort
+        schema:
+          type: string
+          default: +industryName
+      responses:
+        200:
+          description: Successfully retrieved merchant industry codes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageResponse'
+        401:
+          description: You are not authorized to view the resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        403:
+          description: Accessing the resource you were trying to reach is forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      deprecated: false
+  /merchant-industry-codes/industries/{industry}:
+    get:
+      tags:
+      - merchant-industry-code-controller
+      summary: Get merchant industry code details by industry code
+      description: Returns Merchant Industry code details by  Industry code
+      operationId: getByIndustryUsingGET
+      parameters:
+      - name: industry
+        in: path
+        description: industry
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successfully retrieved merchant industry code details by industry
+            code
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MerchantIndustryCode'
+        401:
+          description: You are not authorized to view the resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        403:
+          description: Accessing the resource you were trying to reach is forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: 'Cannot find merchant industry code details by industry code '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      deprecated: false
+  /places/searches:
+    post:
+      tags:
+      - place-controller
+      summary: 'Search for places '
+      description: Returns detailed information on merchants based on the provided,
+        query parameter
+      operationId: searchPlacesUsingPOST
+      parameters:
+      - name: limit
+        in: query
+        description: limit
+        schema:
+          type: integer
+          format: int32
+          default: 25
+      - name: offset
+        in: query
+        description: offset
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      requestBody:
+        description: placeSearchRequest
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/placeSearchRequest'
+        required: true
+      responses:
+        200:
+          description: Successfully retrieved search results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageResponse'
+        201:
+          description: Created
+          content: {}
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        401:
+          description: You are not authorized to view the resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        403:
+          description: Accessing the resource you were trying to reach is forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      deprecated: false
+   
+  /places/{location_id}:
+    get:
+      tags:
+      - place-controller
+      summary: 'Get the location details by using location id '
+      description: Returns detailed information on merchants based on the provided,
+        query parameter, locationId
+      operationId: getPlaceByLocationIdUsingGET
+      parameters:
+      - name: location_id
+        in: path
+        description: location_id
+        required: true
+        schema:
+          type: integer
+          format: int64
+     
+      responses:
+        200:
+          description: Successfully retrieved detailed information on merchants based
+            on the provided path parameter, locationId
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlaceInfo'
+        401:
+          description: You are not authorized to view the resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        403:
+          description: Accessing the resource you were trying to reach is forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      deprecated: false
+components:
+  schemas:
+    AcquirerInfo:
+      title: AcquirerInfo
+      type: object
+      properties:
+        acquirerIcaCode:
+          type: string
+        acquirerMerchantId:
+          type: string
+        originalAcquirerIcaCode:
+          type: string
+        originalAcquirerMerchantId:
+          type: string
+    Error:
+      title: Error
+      required:
+      - Description
+      - ReasonCode
+      - Recoverable
+      - Source
+      type: object
+      properties:
+        Description:
+          type: string
+        Details:
+          type: string
+        ReasonCode:
+          type: string
+        Recoverable:
+          type: boolean
+        Source:
+          type: string
+    ErrorResponse:
+      title: ErrorResponse
+      required:
+      - Errors
+      type: object
+      properties:
+        Errors:
+          $ref: '#/components/schemas/Errors'
+    Errors:
+      title: Errors
+      required:
+      - Error
+      type: object
+      properties:
+        Error:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    IndicatorsInfo:
+      title: IndicatorsInfo
+      type: object
+      properties:
+        isHiddenGem:
+          type: boolean
+        isLocalFavorite:
+          type: boolean
+    MerchantCategoryCode:
+      title: MerchantCategoryCode
+      type: object
+      properties:
+        merchantCategoryCode:
+          type: string
+          description: This code represents the category that a merchant location
+            may be under and is supported by most payment providers
+        merchantCategoryName:
+          type: string
+          description: This is the name of the Merchant Category that accompanies
+            the MCC Code which identifies the category a merchant falls under
+      description: Merchant Category Code
+    MerchantIndustryCode:
+      title: MerchantIndustryCode
+      type: object
+      properties:
+        industry:
+          type: string
+          description: This code represents the industry that a merchant location
+            may be under and is supported by most payments providers
+        industryName:
+          type: string
+          description: This is the name of the Industry that accompanies the Industry
+            Code which identifies the industry a merchant falls under
+      description: Merchant Industry Code
+    PageResponse:
+      title: PageResponse
+      type: object
+      properties:
+        count:
+          type: integer
+          format: int32
+        items:
+          type: array
+          items:
+            type: object
+            properties: {}
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+   
+   
+  
+    PlaceFilter:
+      title: PlaceFilter
+      required:
+      - countryCode
+      type: object
+      properties:
+        aggregateMerchantId:
+          type: integer
+          description: Filter results by the aggregate merchant ID
+          format: int64
+        aggregateMerchantName:
+          type: string
+          description: Filter results by the aggregate merchant name
+        cityName:
+          type: string
+          description: The city for the desired location
+        countryCode:
+          type: string
+          description: The country code for the desired location
+        dateEstablished:
+          type: string
+          description: The date of establishment for the desired location
+          format: date-time
+        dmaCode:
+          type: string
+          description: Filter results by the DMA code
+        dunAndBradstreetNumber:
+          type: string
+          description: The Dun and Bradstreet number for the desired location
+        geocodeQualityIndicator:
+          type: string
+          description: Utilize to only return businesses with the certain characteristics
+            like a rooftop
+        hasCashBack:
+          type: boolean
+          description: Utilize to only return locations that have cash back
+        hasNfc:
+          type: boolean
+          description: Utilize to only return locations that support nfc
+        hasPayAtThePump:
+          type: boolean
+          description: Utilize to only return locations that have pay at the pump
+        industry:
+          type: string
+          description: The industry for the desired location
+        isInBusiness180Day:
+          type: boolean
+          description: Utilize to only return businesses that have had business the
+            last 180 days
+        isInBusiness30Day:
+          type: boolean
+          description: Utilize to only return businesses that have had business the
+            last 30 days
+        isInBusiness360Day:
+          type: boolean
+          description: Utilize to only return businesses that have had business the
+            last 360 days
+        isInBusiness60Day:
+          type: boolean
+          description: Utilize to only return businesses that have had business the
+            last 60 days
+        isInBusiness7Day:
+          type: boolean
+          description: Utilize to only return businesses that have had business the
+            last 7 days
+        isInBusiness90Day:
+          type: boolean
+          description: Utilize to only return businesses that have had business the
+            last 90 days
+        isNewBusiness:
+          type: boolean
+          description: Utilize to only return new or recently opened businesses
+        keyAggregateMerchantId:
+          type: integer
+          description: Filter results by the key aggregate merchant ID
+          format: int64
+        latitude:
+          type: string
+          description: Utilize to only return businesses at the selected latitude
+        legalCorporateName:
+          type: string
+          description: The legal corporate name for the desired location
+        locationId:
+          type: integer
+          description: Filter results by the Location ID
+          format: int64
+        longitude:
+          type: string
+          description: Utilize to only return businesses at the selected longitude
+        mccCode:
+          type: string
+          description: Filter results by the Merchant Category Code
+        merchantName:
+          type: string
+          description: The merchant name for the desired location
+        msaCode:
+          type: string
+          description: Filter results by the MSA code
+        naicsCode:
+          type: string
+          description: Filter results by the NAICS code
+        parentAggregateMerchantId:
+          type: string
+          description: Filter results by the parent aggregate merchant ID
+        parentAggregateMerchantName:
+          type: string
+          description: Filter results by the parent aggregate merchant name
+        placePremium:
+          $ref: '#/components/schemas/PlacePremiumInfo'
+        postalCode:
+          type: string
+          description: The postal code for the desired location
+        primaryChannelOfDistribution:
+          type: string
+          description: Utilize to only return businesses that utilize Brick and Mortar
+            or Web as their primary channel. O = Online / Ecommerce, B = Brick & Mortar,
+            N = Non-Store Retail
+        stateProvinceCode:
+          type: string
+          description: The state for the desired location
+        streetAddress:
+          type: string
+          description: The street address for the desired location
+        superIndustry:
+          type: string
+          description: The super industry for the desired location
+        telephoneNumber:
+          type: string
+          description: The telephone number for the desired location
+        translatedCountryCode:
+          type: string
+      description: Place Filter
+    PlaceInfo:
+      title: PlaceInfo
+      required:
+      - countryCode
+      - locationId
+      type: object
+      properties:
+        aggregateMerchantId:
+          type: integer
+          description: Merchant Aggregate ID groups merchant locations by chain. This
+            is the first level of aggregation
+          format: int64
+        aggregateMerchantName:
+          type: string
+          description: The aggregate merchant name of this merchant location
+        cityName:
+          type: string
+          description: The city for the desired location
+        cleansedCityName:
+          type: string
+          description: The cleansed city name is provided by Mastercard matching its
+            transaction data with another Data Partner to ensure standardization
+        cleansedCountryCode:
+          type: string
+          description: The cleansed country code is provided by Mastercard matching
+            its transaction data with another Data Partner to ensure standardization
+        cleansedLegalCorporateName:
+          type: string
+          description: The cleansed legal corporate name is provided by Mastercard
+            matching its transaction data with another Data Partner to ensure standardization
+        cleansedMerchantName:
+          type: string
+          description: The cleansed merchant name is provided by Mastercard matching
+            its transaction data with another Data Partner to ensure standardization
+        cleansedPostalCode:
+          type: string
+          description: The cleansed postal code is provided by Mastercard matching
+            its transaction data with another Data Partner to ensure standardization
+        cleansedStateProvinceCode:
+          type: string
+          description: The cleansed state is provided by Mastercard matching its transaction
+            data with another Data Partner
+        cleansedStreetAddress:
+          type: string
+          description: The cleansed street address is provided by Mastercard matching
+            its transaction data with another Data Partner to ensure standardization
+        cleansedTelephoneNumber:
+          type: string
+          description: The cleansed telephone number is provided by Mastercard matching
+            its transaction data with another Data Partner to ensure standardization
+        countryCode:
+          type: string
+          description: The country code for the desired location
+        dateEstablished:
+          type: string
+          description: The date of establishment for the desired location
+          format: date-time
+        dmaCode:
+          type: string
+          description: A Designated Market Area or a DMA is a geographic  area that  represents
+            specific television markets as defined by and updated annually by the
+            Nielsen Company. (US Only)
+        geocodeQualityIndicator:
+          type: string
+          description: Geocoding quality indicating the specificity of the geo location
+            such as Storefront, Rooftop, Street, Postcode, Admin, Other or None
+        hasCashBack:
+          type: boolean
+          description: Indicates if the merchants provides cash back
+        hasNfc:
+          type: boolean
+          description: Indicates if the merchant supports near field communications
+            (nfc)
+        hasPayAtThePump:
+          type: boolean
+          description: Indicates if a merchant has pay at the pump
+        industry:
+          type: string
+          description: The industry for the desired location
+        isInBusiness180Day:
+          type: boolean
+          description: Indicates if this location was in business in the last 180
+            days
+        isInBusiness30Day:
+          type: boolean
+          description: Indicates if this location was in business in the last 30 days
+        isInBusiness360Day:
+          type: boolean
+          description: Indicates if this location was in business in the last in the
+            last 360 days
+        isInBusiness60Day:
+          type: boolean
+          description: Indicates if this location was in business in the last 60 days
+        isInBusiness7Day:
+          type: boolean
+          description: Indicates if this location was in business in the last 7 days
+        isInBusiness90Day:
+          type: boolean
+          description: Indicates if this location was in business in the last 90 days
+        isNewBusiness:
+          type: boolean
+          description: Indicates if new or recently opened businesses
+        keyAggregateMerchantId:
+          type: integer
+          description: The Mastercard defined key aggregate merchant id joins together
+            different channels of one merchant under the same id
+          format: int64
+        latitude:
+          type: number
+          description: The latitude geo coordinate position of this merchant location
+            up to 6 decimal precision digits
+          format: double
+        legalCorporateName:
+          type: string
+          description: The legal corporate name for the desired location
+        locationId:
+          type: integer
+          description: The Mastercard assigned location id representing this merchant
+            location
+          format: int64
+        longitude:
+          type: number
+          description: The longitude geo coordinate position of this merchant location
+            up to 6 decimal precision digits
+          format: double
+        mccCode:
+          type: string
+          description: The Merchant Category Code for the desired location
+        merchantName:
+          type: string
+          description: The merchant name for the desired location
+        msaCode:
+          type: string
+          description: The metropolitan statistical area (US only). These codes group
+            merchants into metropolitan area
+        naicsCode:
+          type: string
+          description: North American Industry Classification System Code
+        parentAggregateMerchantId:
+          type: string
+          description: The ID code for the parent aggregate merchant of this merchant
+            location. This helps to further aggregate merchants under one identifier
+        parentAggregateMerchantName:
+          type: string
+          description: The name for the parent aggregate merchant of this merchant
+            location. This helps to further aggregate merchants under one identifier
+        postalCode:
+          type: string
+          description: The postal code for the desired location
+        premiumAttributes:
+          $ref: '#/components/schemas/PlacePremiumInfo'
+        primaryChannelOfDistribution:
+          type: string
+          description: ' Return businesses that utilize Brick and Mortar or Web as
+            their primary channel. \r\nO = Online - Ecommerce, B = Brick and Mortar,
+            N = Non-Store Retail'
+        stateProvinceCode:
+          type: string
+          description: The state for the desired location
+        streetAddress:
+          type: string
+          description: The street address for the desired location
+        superIndustry:
+          type: string
+          description: The super industry for the desired location
+        telephoneNumber:
+          type: string
+          description: The telephone number for the desired location
+      description: Place Info
+    PlacePremiumInfo:
+      title: PlacePremiumInfo
+      type: object
+      properties:
+        acquirer:
+          $ref: '#/components/schemas/AcquirerInfo'
+        indicators:
+          $ref: '#/components/schemas/IndicatorsInfo'
+        tradeArea:
+          $ref: '#/components/schemas/TradeAreaInfo'
+        trends:
+          $ref: '#/components/schemas/TrendsInfo'
+    placeSearchRequest:
+      title: placeSearchRequest
+      type: object
+      properties:
+        distance:
+          type: integer
+          description: Distance measurement for calculating the radius search. Optional
+            The length of distance from the centroid point. Value string(<15). The
+            default will be 3 units
+          format: int64
+        place:
+          $ref: '#/components/schemas/PlaceFilter'
+        radiusSearch:
+          type: boolean
+          description: Switches on the radius search algorithm to be performed with
+            places from a given centroid. Value string (true) switches on the radius
+            search algorithm. NOTE - Latitude and Longitude are REQUIRED for radius
+            search algorithm
+        unit:
+          type: string
+          description: Unit of measurement for calculating the radius search. Optional.
+            Measurement of distance unit in miles or kilometers. Value string (m or
+            km
+          enum:
+          - MILE
+          - KM
+      description: Place Search Request
+    TradeAreaInfo:
+      title: TradeAreaInfo
+      type: object
+      properties:
+        largeTradeArea:
+          type: string
+        localTradeArea:
+          type: string
+        nationalTradeArea:
+          type: string
+        regionalLargeTradeArea:
+          type: string
+        semiLocalTradeArea:
+          type: string
+        tradeAreaRemarkCode:
+          type: string
+    TrendsInfo:
+      title: TrendsInfo
+      type: object
+      properties:
+        averageTicketSizeRank:
+          type: integer
+          format: int64
+        quarterTrending:
+          type: string
+        quarterTrendingIndicatorRemark:
+          type: string
+        transactionVolumeRank:
+          type: integer
+          format: int64

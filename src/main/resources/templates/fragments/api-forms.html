@@ -1,0 +1,153 @@
+<home>
+    <h3>
+        Places API Reference Application for Developers
+    </h3>
+    <p>
+        This reference application is meant to show developers first hand how to implement the Mastercard<sup>®</sup> oauth library in an application.
+        Be sure to read through the readme for further information.
+    </p>
+</home>
+
+<getMccCodes>
+    <p>
+        <h5>Endpoint Description</h5>
+        <p><b>/merchant-category-codes</b> will retrieve a list of merchant category codes.</p>
+        <hr style="margin-top:2rem;"/>
+        <h5>Full URL</h5>
+        <p>sandbox.api.mastercard.com/location-intelligence/places-locator/merchant-category-codes</p>
+        <hr style="margin-top:2rem;"/>
+        <h5>Parameters</h5>
+    </p>
+    <div class="form-group form-row">
+        <div class="col-md-6">
+            <label for="limit">Limit <span class="badge badge-info"> optional</span></label>
+            <input type="text" th:field="*{limit}" class="form-control form-input" id="limit" placeholder="25">
+        </div>
+    </div>
+    <div class="form-group form-row">
+        <div class="col-md-6">
+            <label for="offset">Offset <span class="badge badge-info"> optional</span></label>
+            <input type="text" th:field="*{offset}" class="form-control form-input" id="offset" placeholder="0">
+        </div>
+    </div>
+    <div class="form-group form-row">
+        <div class="col-md-6">
+            <label for="sort">Sort <span class="badge badge-info"> optional</span></label>
+            <input type="text" th:field="*{sort}" class="form-control form-input" id="sort" placeholder="+merchantCategoryName">
+        </div>
+    </div>
+</getMccCodes>
+
+<getMccByCode>
+    <p>
+        <h5>Endpoint Description</h5>
+        <p><b>/merchant-category-codes/mcc-codes/{mccCode}</b> will retrieve the name of the merchant category code.</p>
+        <hr style="margin-top:2rem;"/>
+        <h5>Full URL:</h5>
+        <p>sandbox.api.mastercard.com/location-intelligence/places-locator/merchant-category-codes/mcc-codes/{mcc_code}</p>
+        <hr style="margin-top:2rem;"/>
+        <h5>Parameters</h5>
+    </p>
+    <div class="form-group form-row">
+        <div class="col-md-6">
+            <label for="merchantCategoryCode">Merchant Category Code <span class="badge badge-danger"> required</span></label>
+            <input type="text" th:field="*{mccCode}" class="form-control form-input" id="merchantCategoryCode" placeholder="0001" required>
+        </div>
+    </div>
+</getMccByCode>
+
+<getIndustryCodes>
+    <p>
+        <h5>Endpoint Description</h5>
+        <p><b>/industry-codes</b> will retrieve a list of Industry codes.</p>
+        <hr style="margin-top:2rem;"/>
+        <h5>Full URL:</h5>
+        <p>sandbox.api.mastercard.com/location-intelligence/places-locator/industry-codes</p>
+        <hr style="margin-top:2rem;"/>
+        <h5>Parameters</h5>
+    </p>
+    <div class="form-group form-row">
+        <div class="col-md-6">
+            <label for="limit">Limit <span class="badge badge-info"> optional</span></label>
+            <input type="text" th:field="*{limit}" class="form-control form-input" id="limit" placeholder="25">
+        </div>
+    </div>
+    <div class="form-group form-row">
+        <div class="col-md-6">
+            <label for="offset">Offset <span class="badge badge-info"> optional</span></label>
+            <input type="text" th:field="*{offset}" class="form-control form-input" id="offset" placeholder="0">
+        </div>
+    </div>
+    <div class="form-group form-row">
+        <div class="col-md-6">
+            <label for="sort">Sort <span class="badge badge-info"> optional</span></label>
+            <input type="text" th:field="*{sort}" class="form-control form-input" id="sort" placeholder="+industryName">
+        </div>
+    </div>
+</getIndustryCodes>
+
+<getIndustryByCode>
+    <p>
+        <h5>Endpoint Description</h5>
+        <p><b>/industry-codes/industries/{industryCode}</b> will retrieve the name of the Industry code.</p>
+        <hr style="margin-top:2rem;"/>
+        <h5>Full URL:</h5>
+        <p>sandbox.api.mastercard.com/location-intelligence/places-locator/industry-codes/industries/{industry}</p>
+        <hr style="margin-top:2rem;"/>
+        <h5>Parameters</h5>
+    </p>
+    <div class="form-group form-row">
+        <div class="col-md-6">
+            <label for="merchantCategoryCode">Industry Code <span class="badge badge-danger"> required</span></label>
+            <input type="text" th:field="*{industryCode}" class="form-control form-input" id="industryCode" placeholder="AAF" required>
+        </div>
+    </div>
+</getIndustryByCode>
+
+<getLocationDetails>
+    <p>
+        <h5>Endpoint Description</h5>
+        <p><b>/places/{location_id}</b> will retrieve the information of the place with {location_id}.</p>
+        <hr style="margin-top:2rem;"/>
+        <h5>Full URL:</h5>
+        <p>sandbox.api.mastercard.com/location-intelligence/places-locator/places/{location_id}</p>
+        <hr style="margin-top:2rem;"/>
+        <h5>Parameters</h5>
+    </p>
+    <div class="form-group form-row">
+        <div class="col-md-6">
+            <label for="locationId">Location ID <span class="badge badge-danger"> required</span></label>
+            <input type="text" th:field="*{locationId}" class="form-control form-input" id="locationId" placeholder="6004" required>
+        </div>
+    </div>
+</getLocationDetails>
+
+<postPlacesSearch>
+    <p>
+        <h5>Endpoint Description</h5>
+        <p><b>/places/searches</b> will retrieve a list of places that fit the search request.</p>
+        <hr style="margin-top:2rem;"/>
+        <h5>Full URL:</h5>
+        <p>sandbox.api.mastercard.com/location-intelligence/places-locator/places/searches</p>
+        <hr style="margin-top:2rem;"/>
+        <h5>Parameters</h5>
+    </p>
+    <div class="form-group form-row">
+        <div class="col-md-6">
+            <label for="limit">Limit <span class="badge badge-info"> optional</span></label>
+            <input type="text" th:field="*{limit}" class="form-control form-input" id="limit" placeholder="25">
+        </div>
+    </div>
+    <div class="form-group form-row">
+        <div class="col-md-6">
+            <label for="offset">Offset <span class="badge badge-info"> optional</span></label>
+            <input type="text" th:field="*{offset}" class="form-control form-input" id="offset" placeholder="0">
+        </div>
+    </div>
+    <div class="form-group form-row">
+        <div class="col-md-12">
+            <label for="searchInput">Place info (in JSON) <span class="badge badge-danger"> required</span></label>
+            <textarea th:field="*{searchInput}" class="form-control form-input largeEntry" id="searchInput" required></textarea>
+        </div>
+    </div>
+</postPlacesSearch>
