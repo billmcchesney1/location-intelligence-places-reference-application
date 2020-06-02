@@ -1,5 +1,5 @@
 # Places API Reference Application
-This project showcases the use case of retrieving places and its data using the Places API [here](https://developer.mastercard.com/documentation/places/2)
+This project showcases the use case of retrieving places and its data using the Places API v2 [here](https://developer.mastercard.com/documentation/places/2)
 
 ## Frameworks Used
 - Spring
@@ -95,4 +95,4 @@ The endpoints `/mcc-codes/{mccCode}` and `/industry-codes/industries/{industry}`
 |----------|-----------|
 |mcc    | Merchant Category Codes
 
-**Copyright © 1994-2020, All Right Reserved by Mastercard.**
+**Copyright © 1994-2020, All Rights Reserved by Mastercard.**
