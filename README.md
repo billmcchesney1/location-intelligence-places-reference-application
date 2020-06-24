@@ -46,29 +46,28 @@ The client library used to generate the API Calls and object models for this app
 in the project's root directory.
 ```xml
 <plugin>
-    <groupId>org.openapitools</groupId>
-    <artifactId>openapi-generator-maven-plugin</artifactId>
-    <version>4.1.1</version>
-    <executions>
-        <execution>
-            <goals>
-                <goal>generate</goal>
-            </goals>
-            <configuration>
-                <inputSpec>${project.basedir}/src/main/resources/places-reference.yaml</inputSpec>
-                <generatorName>java</generatorName>
-                <library>okhttp-gson</library>
-                <configurationFile>${project.basedir}/src/main/resources/openapi-config.json</configurationFile>
-                <generateApiTests>false</generateApiTests>
-                <generateModelTests>false</generateModelTests>
-                <generateApiTests>false</generateApiTests>
-                <configOptions>
-                    <sourceFolder>src/gen/java/main</sourceFolder>
-                </configOptions>
-            </configuration>
-        </execution>
-    </executions>
-</plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>4.3.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/places-api-spec.yml</inputSpec>
+                            <generatorName>java</generatorName>
+                            <library>okhttp-gson</library>
+                            <configurationFile>${project.basedir}/src/main/resources/openapi-config.json</configurationFile>
+                            <generateApiTests>false</generateApiTests>
+                            <generateModelTests>false</generateModelTests>
+                            <configOptions>
+                                <sourceFolder>src/gen/java/main</sourceFolder>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 ```
     
 For more information on how this client generator works please consult the official [Github repository](https://github.com/OpenAPITools/openapi-generator)

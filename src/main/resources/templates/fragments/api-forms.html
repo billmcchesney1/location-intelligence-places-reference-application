@@ -26,13 +26,13 @@
 
 <getMccCodes>
     <p>
-        <h5>Endpoint Description</h5>
-        <p><b>/merchant-category-codes</b> will retrieve a list of merchant category codes.</p>
-        <hr style="margin-top:2rem;"/>
-        <h5>Full URL</h5>
-        <p>sandbox.api.mastercard.com/location-intelligence/places-locator/merchant-category-codes</p>
-        <hr style="margin-top:2rem;"/>
-        <h5>Parameters</h5>
+    <h5>Endpoint Description</h5>
+    <p><b>/merchant-category-codes</b> will retrieve a list of merchant category codes.</p>
+    <hr style="margin-top:2rem;"/>
+    <h5>Full URL</h5>
+    <p th:text="${basePath} + '/merchant-category-codes'"></p>
+    <hr style="margin-top:2rem;"/>
+    <h5>Parameters</h5>
     </p>
     <div class="form-group form-row">
         <div class="col-md-6">
@@ -56,13 +56,13 @@
 
 <getMccByCode>
     <p>
-        <h5>Endpoint Description</h5>
-        <p><b>/merchant-category-codes/mcc-codes/{mccCode}</b> will retrieve the name of the merchant category code.</p>
-        <hr style="margin-top:2rem;"/>
-        <h5>Full URL:</h5>
-        <p>sandbox.api.mastercard.com/location-intelligence/places-locator/merchant-category-codes/mcc-codes/{mcc_code}</p>
-        <hr style="margin-top:2rem;"/>
-        <h5>Parameters</h5>
+    <h5>Endpoint Description</h5>
+    <p><b>/merchant-category-codes/mcc-codes/{mccCode}</b> will retrieve the name of the merchant category code.</p>
+    <hr style="margin-top:2rem;"/>
+    <h5>Full URL:</h5>
+    <p th:text="${basePath} + '/merchant-category-codes/mcc-codes/{mcc_code}'"></p>
+    <hr style="margin-top:2rem;"/>
+    <h5>Parameters</h5>
     </p>
     <div class="form-group form-row">
         <div class="col-md-6">
@@ -74,13 +74,13 @@
 
 <getIndustryCodes>
     <p>
-        <h5>Endpoint Description</h5>
-        <p><b>/industry-codes</b> will retrieve a list of Industry codes.</p>
-        <hr style="margin-top:2rem;"/>
-        <h5>Full URL:</h5>
-        <p>sandbox.api.mastercard.com/location-intelligence/places-locator/industry-codes</p>
-        <hr style="margin-top:2rem;"/>
-        <h5>Parameters</h5>
+    <h5>Endpoint Description</h5>
+    <p><b>/merchant-industry-codes</b> will retrieve a list of Industry codes.</p>
+    <hr style="margin-top:2rem;"/>
+    <h5>Full URL:</h5>
+    <p th:text="${basePath} + '/merchant-industry-codes'"></p>
+    <hr style="margin-top:2rem;"/>
+    <h5>Parameters</h5>
     </p>
     <div class="form-group form-row">
         <div class="col-md-6">
@@ -104,13 +104,13 @@
 
 <getIndustryByCode>
     <p>
-        <h5>Endpoint Description</h5>
-        <p><b>/industry-codes/industries/{industryCode}</b> will retrieve the name of the Industry code.</p>
-        <hr style="margin-top:2rem;"/>
-        <h5>Full URL:</h5>
-        <p>sandbox.api.mastercard.com/location-intelligence/places-locator/industry-codes/industries/{industry}</p>
-        <hr style="margin-top:2rem;"/>
-        <h5>Parameters</h5>
+    <h5>Endpoint Description</h5>
+    <p><b>/merchant-industry-codes/industries/{industryCode}</b> will retrieve the name of the Industry code.</p>
+    <hr style="margin-top:2rem;"/>
+    <h5>Full URL:</h5>
+    <p th:text="${basePath} + '/merchant-industry-codes/industries/{industry}'"></p>
+    <hr style="margin-top:2rem;"/>
+    <h5>Parameters</h5>
     </p>
     <div class="form-group form-row">
         <div class="col-md-6">
@@ -122,13 +122,13 @@
 
 <getLocationDetails>
     <p>
-        <h5>Endpoint Description</h5>
-        <p><b>/places/{location_id}</b> will retrieve the information of the place with {location_id}.</p>
-        <hr style="margin-top:2rem;"/>
-        <h5>Full URL:</h5>
-        <p>sandbox.api.mastercard.com/location-intelligence/places-locator/places/{location_id}</p>
-        <hr style="margin-top:2rem;"/>
-        <h5>Parameters</h5>
+    <h5>Endpoint Description</h5>
+    <p><b>/places/{location_id}</b> will retrieve the information of the place with {location_id}.</p>
+    <hr style="margin-top:2rem;"/>
+    <h5>Full URL:</h5>
+    <p th:text="${basePath} + '/places/{location_id}'"></p>
+    <hr style="margin-top:2rem;"/>
+    <h5>Parameters</h5>
     </p>
     <div class="form-group form-row">
         <div class="col-md-6">
@@ -140,13 +140,13 @@
 
 <postPlacesSearch>
     <p>
-        <h5>Endpoint Description</h5>
-        <p><b>/places/searches</b> will retrieve a list of places that fit the search request.</p>
-        <hr style="margin-top:2rem;"/>
-        <h5>Full URL:</h5>
-        <p>sandbox.api.mastercard.com/location-intelligence/places-locator/places/searches</p>
-        <hr style="margin-top:2rem;"/>
-        <h5>Parameters</h5>
+    <h5>Endpoint Description</h5>
+    <p><b>/places/searches</b> will retrieve a list of places that fit the search request.</p>
+    <hr style="margin-top:2rem;"/>
+    <h5>Full URL:</h5>
+    <p th:text="${basePath} + '/places/searches'"></p>
+    <hr style="margin-top:2rem;"/>
+    <h5>Parameters</h5>
     </p>
     <div class="form-group form-row">
         <div class="col-md-6">

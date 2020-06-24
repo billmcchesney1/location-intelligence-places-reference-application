@@ -102,7 +102,6 @@
                             <configurationFile>${project.basedir}/src/main/resources/openapi-config.json</configurationFile>
                             <generateApiTests>false</generateApiTests>
                             <generateModelTests>false</generateModelTests>
-                            <generateApiTests>false</generateApiTests>
                             <configOptions>
                                 <sourceFolder>src/gen/java/main</sourceFolder>
                             </configOptions>
