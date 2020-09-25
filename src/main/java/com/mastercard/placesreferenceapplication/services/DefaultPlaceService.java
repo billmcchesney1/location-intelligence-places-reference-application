@@ -72,8 +72,7 @@ public class DefaultPlaceService implements PlaceService {
                             .addInterceptor(new OkHttpOAuth1Interceptor(consumerKey, getSigningKey()))
                             .build()
             );
-        client.setDebugging(true);
-         
+
         return client;
     }
 
