@@ -2,7 +2,7 @@
 
 [![](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/Mastercard/loyalty-user-management-reference/blob/master/LICENSE)
 
-##Table of Contents
+## Table of Contents
 
 - [Overview](#overview)
     * [Compatibility](#compatibility)

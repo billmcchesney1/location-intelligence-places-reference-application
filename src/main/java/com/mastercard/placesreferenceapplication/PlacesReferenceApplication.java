@@ -22,6 +22,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class PlacesReferenceApplication {
     public static void main(String[] args) {
-        SpringApplication.run(PlacesReferenceApplication.class, args);
+        SpringApplication.run(PlacesReferenceApplication.class);
     }
 }
