@@ -56,28 +56,28 @@ public class DefaultPlaceService implements PlaceService {
         placesApi = new PlacesApi(apiClient);
     }
 
-    public PagedMerchantCategoryCode getMccCodes(int limit, int offset, String sort) throws ApiException {
-        return merchantCategoryCodesApi.getAllMerchantCategoryCodesUsingGet(limit, offset, sort);
+    public PagedMerchantCategoryCode getMerchantCategoryCodes(int limit, int offset) throws ApiException {
+        return merchantCategoryCodesApi.getAllMerchantCategoryCodesUsingGet(limit, offset, null);
     }
 
-    public MerchantCategoryCode getMccByCode(String mccCode) throws ApiException {
+    public MerchantCategoryCode getMerchantCategoryByCode(String mccCode) throws ApiException {
         return merchantCategoryCodesApi.getByMccCodeUsingGET(mccCode);
     }
 
-    public PagedMerchantIndustryCode getIndustryCodes(int limit, int offset, String sort) throws ApiException {
+    public PagedMerchantIndustryCode getMerchantIndustryCodes(int limit, int offset) throws ApiException {
 
-        return merchantIndustryCodesApi.getAllIndustryCodesUsingGET(limit, offset, sort);
+        return merchantIndustryCodesApi.getAllIndustryCodesUsingGET(limit, offset, null);
     }
 
-    public MerchantIndustryCode getIndustryByCode(String industryCode) throws ApiException {
+    public MerchantIndustryCode getMerchantIndustryByCode(String industryCode) throws ApiException {
         return merchantIndustryCodesApi.getByIndustryUsingGET(industryCode);
     }
 
-    public PlaceInfo getLocationDetails(long locationId) throws ApiException {
+    public PlaceInfo getPlaceDetailsByLocationId(long locationId) throws ApiException {
         return placesApi.getPlaceByLocationIdUsingGET(locationId);
     }
 
-    public PagedPlaceInfo postPlacesSearch(PlaceSearchRequest placeSearchRequestInfo, int limit, int offset) throws ApiException {
+    public PagedPlaceInfo getPlacesSearch(PlaceSearchRequest placeSearchRequestInfo, int limit, int offset) throws ApiException {
         return placesApi.searchPlacesUsingPOST(placeSearchRequestInfo, limit, offset);
     }
 

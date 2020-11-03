@@ -16,26 +16,33 @@
 
 package com.mastercard.placesreferenceapplication.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.mastercard.placesreferenceapplication.constants.PlacesConstants;
-import com.mastercard.placesreferenceapplication.models.RedirectionModel;
-import com.mastercard.placesreferenceapplication.models.ApiModel;
 import com.mastercard.placesreferenceapplication.services.PlaceService;
-import org.openapitools.client.model.*;
+
+import org.openapitools.client.ApiException;
+import org.openapitools.client.model.MerchantCategoryCode;
+import org.openapitools.client.model.PagedMerchantCategoryCode;
+import org.openapitools.client.model.MerchantIndustryCode;
+import org.openapitools.client.model.PagedMerchantIndustryCode;
+import org.openapitools.client.model.PlaceInfo;
+import org.openapitools.client.model.PlaceFilter;
+import org.openapitools.client.model.PagedPlaceInfo;
+import org.openapitools.client.model.PlaceSearchRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
 
-@Controller
+@RestController
+@RequestMapping(value = "/places")
 public class PlacesController {
-
-    @Value("${mastercard.basePath}")
-    private String basePath;
 
     private final PlaceService service;
     @Autowired
@@ -43,102 +50,79 @@ public class PlacesController {
         this.service = placeService;
     }
 
+//    Calls for the places on the map
 
+    @GetMapping("/search")
+    @ResponseBody
+    @Cacheable("places-cache")
+    public ResponseEntity<PagedPlaceInfo> getPlacesSearch(@RequestParam(value = "pageOffset", defaultValue = "0", required = false) int pageOffset,
+                                                          @RequestParam(value = "pageLength", defaultValue = "20", required = false) int pageLength,
+                                                          @RequestParam("latitude") double latitude,
+                                                          @RequestParam("longitude") double longitude,
+                                                          @RequestParam("distanceUnit") String distanceUnit,
+                                                          @RequestParam("country") String country) {
+        PlaceFilter placeFilter = new PlaceFilter();
+        placeFilter.setCountryCode(country);
+        placeFilter.setLatitude(String.valueOf(latitude));
+        placeFilter.setLongitude(String.valueOf(longitude));
 
-    @GetMapping("/")
-    public String index(Model model, @ModelAttribute("redirection") RedirectionModel redir, RedirectAttributes redirectAttrs) {
-        //Sets landing page and adds the apiModel
-        model.addAttribute("requestType", (!redir.getForm().isEmpty() ? redir.getForm() : "home"));
-        model.addAttribute("apiModel", new ApiModel());
-        model.addAttribute("basePath", basePath);
+        PlaceSearchRequest placeSearchRequest = new PlaceSearchRequest();
+        placeSearchRequest.setPlace(placeFilter);
+        placeSearchRequest.setUnit(PlaceSearchRequest.UnitEnum.fromValue(distanceUnit));
+        placeSearchRequest.setDistance(5L);
+        placeSearchRequest.setRadiusSearch(true);
 
-        return "index.html";
-    }
-
-    @GetMapping("/getMccCodes")
-    public String getMccCodes(@ModelAttribute("apiModel") ApiModel apiModel, RedirectAttributes redirectAttrs) {
         try {
-            PageResponse codes = service.getMccCodes(apiModel.getLimit(), apiModel.getOffset(), apiModel.getSort());
-
-            redirectAttrs.addFlashAttribute(PlacesConstants.RESPONSE, new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(codes));
-            redirectAttrs.addFlashAttribute(PlacesConstants.SUCCESS, "Merchant Category Codes retrieved successfully!");
-        } catch (Exception e) {
-            redirectAttrs.addFlashAttribute(PlacesConstants.ERROR, e.getMessage());
-            redirectAttrs.addFlashAttribute(PlacesConstants.RESPONSE, service.getErrorAttributes(e));
+            return ResponseEntity.ok(service.getPlacesSearch(placeSearchRequest, pageLength, pageOffset));
+        } catch(ApiException exception) {
+            return new ResponseEntity(exception.getMessage(), HttpStatus.valueOf(exception.getCode()));
         }
-        return "redirect:/?form=getMccCodes";
     }
 
-    @GetMapping("/getMccByCode")
-    public String getMccByCode(@ModelAttribute("apiModel") ApiModel apiModel, RedirectAttributes redirectAttrs) {
+    @GetMapping("/{locationId}")
+    public ResponseEntity<PlaceInfo> getPlaceDetailsByLocationId(@PathVariable("locationId") long locationId) {
         try {
-            MerchantCategoryCode categoryName = service.getMccByCode(apiModel.getMccCode());
-
-            redirectAttrs.addFlashAttribute(PlacesConstants.RESPONSE, new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(categoryName));
-            redirectAttrs.addFlashAttribute(PlacesConstants.SUCCESS, "Category Name retrieved successfully!");
-        } catch (Exception e) {
-            redirectAttrs.addFlashAttribute(PlacesConstants.ERROR, e.getMessage());
-            redirectAttrs.addFlashAttribute(PlacesConstants.RESPONSE, service.getErrorAttributes(e));
+            return ResponseEntity.ok(service.getPlaceDetailsByLocationId(locationId));
+        } catch(ApiException exception) {
+            return new ResponseEntity(exception.getMessage(), HttpStatus.valueOf(exception.getCode()));
         }
-        return "redirect:/?form=getMccByCode";
     }
 
-    @GetMapping("/getIndustryCodes")
-    public String getIndustryCodes(@ModelAttribute("apiModel") ApiModel apiModel, RedirectAttributes redirectAttrs) {
+    @GetMapping("/merchantCategoryCodes")
+    public ResponseEntity<PagedMerchantCategoryCode> getMerchantCategoryCodes() {
         try {
-            PageResponse codes = service.getIndustryCodes(apiModel.getLimit(), apiModel.getOffset(), apiModel.getSort());
-
-            redirectAttrs.addFlashAttribute(PlacesConstants.RESPONSE, new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(codes));
-            redirectAttrs.addFlashAttribute(PlacesConstants.SUCCESS, "Industry Codes retrieved successfully!");
-        } catch (Exception e) {
-            redirectAttrs.addFlashAttribute(PlacesConstants.ERROR, e.getMessage());
-            redirectAttrs.addFlashAttribute(PlacesConstants.RESPONSE, service.getErrorAttributes(e));
+            return ResponseEntity.ok(service.getMerchantCategoryCodes(100,0));
+        } catch(ApiException exception) {
+            return new ResponseEntity(exception.getMessage(), HttpStatus.valueOf(exception.getCode()));
         }
-        return "redirect:/?form=getIndustryCodes";
     }
 
-    @GetMapping("/getIndustryByCode")
-    public String getIndustryByCode(@ModelAttribute("apiModel") ApiModel apiModel, RedirectAttributes redirectAttrs) {
+    @GetMapping("/merchantCategoryCodes/{mccCode}")
+    public ResponseEntity<MerchantCategoryCode> getMerchantCategoryByCode(@PathVariable("mccCode") String mccCode) {
         try {
-            MerchantIndustryCode industryName = service.getIndustryByCode(apiModel.getIndustryCode());
-
-            redirectAttrs.addFlashAttribute(PlacesConstants.RESPONSE, new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(industryName));
-            redirectAttrs.addFlashAttribute(PlacesConstants.SUCCESS, "Industry Name retrieved successfully!");
-        } catch (Exception e) {
-            redirectAttrs.addFlashAttribute(PlacesConstants.ERROR, e.getMessage());
-            redirectAttrs.addFlashAttribute(PlacesConstants.RESPONSE, service.getErrorAttributes(e));
+            return ResponseEntity.ok(service.getMerchantCategoryByCode(mccCode));
+        } catch(ApiException exception) {
+            return new ResponseEntity(exception.getMessage(), HttpStatus.valueOf(exception.getCode()));
         }
-        return "redirect:/?form=getIndustryByCode";
     }
 
-    @GetMapping("/getLocationDetails")
-    public String getLocationDetails(@ModelAttribute("apiModel") ApiModel apiModel, RedirectAttributes redirectAttrs) {
+    @GetMapping("/merchantIndustryCodes")
+    public ResponseEntity<PagedMerchantIndustryCode> getMerchantIndustryCodes() {
         try {
-            PlaceInfo placeDetails = service.getLocationDetails(apiModel.getLocationId());
-
-            redirectAttrs.addFlashAttribute(PlacesConstants.RESPONSE, new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(placeDetails));
-            redirectAttrs.addFlashAttribute(PlacesConstants.SUCCESS, "Place retrieved successfully!");
-        } catch (Exception e) {
-            redirectAttrs.addFlashAttribute(PlacesConstants.ERROR, e.getMessage());
-            redirectAttrs.addFlashAttribute(PlacesConstants.RESPONSE, service.getErrorAttributes(e));
+            return ResponseEntity.ok(service.getMerchantIndustryCodes(101, 0));
+        } catch(ApiException exception) {
+            return new ResponseEntity(exception.getMessage(), HttpStatus.valueOf(exception.getCode()));
         }
-        return "redirect:/?form=getLocationDetails";
     }
 
-    @GetMapping("/postPlacesSearch")
-    public String postPlacesSearch(@ModelAttribute("apiModel") ApiModel apiModel, RedirectAttributes redirectAttrs) {
+    @GetMapping("/merchantIndustryCodes/{industryCode}")
+    public ResponseEntity<MerchantIndustryCode> getMerchantIndustryByCode(@PathVariable("industryCode") String industryCode) {
         try {
-            Gson gson = new Gson();
-            PlaceSearchRequest placeSearchRequest = gson.fromJson(apiModel.getSearchInput(), PlaceSearchRequest.class);
-
-            PageResponse placeDetails = service.postPlacesSearch(placeSearchRequest,apiModel.getLimit(),apiModel.getOffset());
-
-            redirectAttrs.addFlashAttribute(PlacesConstants.RESPONSE, new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(placeDetails));
-            redirectAttrs.addFlashAttribute(PlacesConstants.SUCCESS, "Places Search retrieved successfully!");
-        } catch (Exception e) {
-            redirectAttrs.addFlashAttribute(PlacesConstants.ERROR, e.getMessage());
-            redirectAttrs.addFlashAttribute(PlacesConstants.RESPONSE, service.getErrorAttributes(e));
+            return ResponseEntity.ok(service.getMerchantIndustryByCode(industryCode));
+        } catch(ApiException exception) {
+            return new ResponseEntity(exception.getMessage(), HttpStatus.valueOf(exception.getCode()));
         }
-        return "redirect:/?form=postPlacesSearch";
     }
+
+
 }

@@ -28,17 +28,17 @@ import org.openapitools.client.model.PlaceSearchRequest;
 
 public interface PlaceService {
 
-    PagedMerchantCategoryCode getMccCodes(int limit, int offset, String sort) throws ApiException;
+    PagedMerchantCategoryCode getMerchantCategoryCodes(int limit, int offset) throws ApiException;
 
-    MerchantCategoryCode getMccByCode(String mccCode) throws ApiException;
+    MerchantCategoryCode getMerchantCategoryByCode(String mccCode) throws ApiException;
 
-    PagedMerchantIndustryCode getIndustryCodes(int limit, int offset, String sort) throws ApiException;
+    PagedMerchantIndustryCode getMerchantIndustryCodes(int limit, int offset) throws ApiException;
 
-    MerchantIndustryCode getIndustryByCode(String industryCode) throws ApiException;
+    MerchantIndustryCode getMerchantIndustryByCode(String industryCode) throws ApiException;
 
-    PlaceInfo getLocationDetails(long locationId) throws ApiException;
+    PlaceInfo getPlaceDetailsByLocationId(long locationId) throws ApiException;
 
-    PagedPlaceInfo postPlacesSearch(PlaceSearchRequest placeSearchRequestInfo, int limit, int offset) throws ApiException;
+    PagedPlaceInfo getPlacesSearch(PlaceSearchRequest placeSearchRequestInfo, int limit, int offset) throws ApiException;
 
     String getErrorAttributes(Exception e);
 }

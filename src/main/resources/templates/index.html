@@ -15,25 +15,112 @@
 -->
 
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8">
-        <title>Places Reference Application</title>
-        <link rel="stylesheet" href="../static/css/bootstrap.css" th:href="@{/css/bootstrap.css}"/>
-        <link rel="stylesheet" href="../static/css/form.css" th:href="@{/css/form.css}">
-        <link rel="stylesheet" href="../static/css/application.css" th:href="@{/css/application.css}">
+<html lang="en" class="no-js" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Places Reference App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 
+    <!-- jquery -->
+    <script th:src="@{/libs/jquery/jquery.min.js}"></script>
 
-        <script type="application/javascript" th:src="@{/js/jquery-3.3.1.min.js}"></script>
-        <link rel="stylesheet" th:href="@{/css/jquery-ui.css}">
-        <script type="application/javascript" th:src="@{/js/jquery-ui.js}"></script>
-        <script type="text/javascript" src="js/application.js" th:src="@{/js/application.js}"></script>
+    <!-- sanitize -->
+    <link rel="stylesheet" href="../static/libs/sanitize/sanitize.css" th:href="@{/libs/sanitize/sanitize.css}">
 
-    </head>
-    <body>
-        <div th:insert="fragments/common-components.html :: api-form"></div>
+    <!-- main -->
+    <link rel="stylesheet" href="../static/css/main.css" th:href="@{/css/main.css}">
 
-        <!-- Display success or error depending on response -->
-        <div th:insert="fragments/common-components.html :: api-response"> </div>
-    </body>
+    <script th:src="@{/js/config.js}"></script>
+    <script th:src="@{/js/api.js}"></script>
+    <script th:src="@{/js/map.js}"></script>
+    <script th:src="@{/js/distanceUtil.js}"></script>
+    <script th:src="@{/js/view.js}"></script>
+    <script th:src="@{/js/presenter.js}"></script>
+    <script th:src="@{/js/app.js}"></script>
+</head>
+
+<body>
+<div id="places-container" class="places-container">
+    <!-- Overlay menu -->
+    <div id="overlay-menu" class="overlay-menu">
+        <div class="overlay-menu-docs">
+            <a href="https://developer.mastercard.com/places-v2/documentation/" target="_blank">
+                View Documentation
+            </a>
+        </div>
+        <div class="overlay-menu-github">
+            <a href="https://github.com/Mastercard/location-intelligence-places-reference-application" target="_blank">
+                View on Github
+            </a>
+        </div>
+    </div>
+    <!-- Nav bar -->
+    <nav id="navbar" class="places-navbar">
+        <div class="places-navbar-left">
+            <img class="places-navbar-menu" th:src="@{/images/menu.svg}" onclick="openOverlayMenu()" />
+            <img class="places-navbar-close" th:src="@{/images/close.svg}" onclick="closeOverlayMenu()" />
+            <img class="places-navbar-cogs" th:src="@{/images/cogs.svg}" />
+            <img class="places-navbar-cogs-text" th:src="@{/images/mc_dev_logo_hrz.svg}" />
+            <span class="places-navbar-title">Places Reference App</span>
+        </div>
+
+        <div class="places-navbar-right">
+            <div class="btn places-button-github">
+                <a href="https://github.com/Mastercard/location-intelligence-places-reference-application" target="_blank">
+                    View on Github
+                </a>
+            </div>
+            <div class="btn places-button-docs">
+                <a href="https://developer.mastercard.com/places-v2/documentation/" target="_blank">
+                    View Documentation
+                </a>
+            </div>
+        </div>
+    </nav>
+    <!-- Map + Place List -->
+    <div class="places-maps-list-container">
+        <div id="map" class="places-map">
+        </div>
+        <div id="places-list-wrapper" class="places-list-wrapper hide">
+            <div class="places-list-container">
+                <header class="places-list-header">
+                    <div class="places-list-header-container">
+                        <span class="places-list-nearby">Places near O'Fallon, MO</span>
+                    </div>
+                </header>
+                <div id="place-list" class="places-list">
+                </div>
+                <div id="places-list-loading" class="places-list-loading hide">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Templates -->
+<div id="places-list-item-template" class="places-list-item hide">
+    <div class="places-list-item-header-container">
+        <div class="places-list-item-header">
+            <p class="places-list-item-name"></p>
+            <p class="places-list-item-distance"></p>
+            <p class="places-list-item-industry"></p>
+            <p class="places-list-item-category"></p>
+        </div>
+        <img class="places-list-item-caret" th:src="@{/images/caret.svg}" />
+    </div>
+
+    <div class="places-list-item-details">
+        <p class="places-list-item-address places-list-item-address-line1"></p>
+        <p class="places-list-item-address places-list-item-address-city"></p>
+        <hr class="places-list-item-details-separator" />
+        <p class="places-list-item-details-services-header">Services</p>
+        <div class="places-list-item-details-services-list">
+        </div>
+    </div>
+</div>
+
+<p id="places-list-item-details-service-template" class="places-list-item-details-service hide"></p>
+<script async defer th:src="'https://maps.googleapis.com/maps/api/js?key='+${@environment.getProperty('google.maps.api.key')}+'&callback=initMap'"></script>
+
+</body>
 </html>

@@ -477,19 +477,19 @@ components:
       properties:
         distance:
           type: integer
-          description: Distance measurement for calculating the radius search. Optional
-            The length of distance from the centroid point. Value string(<15). The
-            default will be 3 units
+          description: Distance measurement for calculating the radius search.
+            The length of distance from the centroid point. Value integer(<15).
           format: int64
+          example: 10
         place:
           $ref: '#/components/schemas/PlaceFilter'
         radiusSearch:
           type: boolean
           description: Switches on the radius search algorithm to be performed with
-            places from a given centroid. Value string (true) switches on the radius
-            search algorithm. NOTE - Latitude and Longitude are REQUIRED for radius
+            places from a given centroid. Value boolean (true) switches on the radius
+            search algorithm. NOTE - Distance, Latitude and Longitude are REQUIRED for radius
             search algorithm
-          example: false
+          example: true
         unit:
           type: string
           description: Unit of measurement for calculating the radius search. Optional.
@@ -507,12 +507,10 @@ components:
       properties:
         aggregateMerchantId:
           type: integer
-          example: 12077
           description: Filter results by the aggregate merchant ID
           format: int64
         aggregateMerchantName:
           type: string
-          example: 'FAMOUS FOOTWEAR'
           description: Filter results by the aggregate merchant name
         cityName:
           type: string
@@ -524,24 +522,19 @@ components:
           description: The country code for the desired location
         dateEstablished:
           type: string
-          example: '1999-10-23'
           description: The date of establishment for the desired location
           format: date
         dmaCode:
           type: string
-          example: '609'
           description: Filter results by the DMA code
         dunAndBradstreetNumber:
           type: string
-          example: '123456789'
           description: The Dun and Bradstreet number for the desired location
         geocodeQualityIndicator:
           type: string
-          example: 'STOREFRONT'
           description: Utilize to only return businesses with the certain characteristics like a rooftop
         hasCashBack:
           type: boolean
-          example: false
           description: Utilize to only return locations that have cash back
         hasNfc:
           type: boolean
@@ -549,35 +542,27 @@ components:
           description: Utilize to only return locations that support nfc
         hasPayAtThePump:
           type: boolean
-          example: false
           description: Utilize to only return locations that have pay at the pump
         industry:
           type: string
-          example: 'SHS'
           description: The industry for the desired location
         isInBusiness180Day:
           type: boolean
-          example: true
           description: Utilize to only return businesses that have had business the last 180 days
         isInBusiness30Day:
           type: boolean
-          example: true
           description: Utilize to only return businesses that have had business the last 30 days
         isInBusiness360Day:
           type: boolean
-          example: true
           description: Utilize to only return businesses that have had business the last 360 days
         isInBusiness60Day:
           type: boolean
-          example: true
           description: Utilize to only return businesses that have had business the last 60 days
         isInBusiness7Day:
           type: boolean
-          example: true
           description: Utilize to only return businesses that have had business the last 7 days
         isInBusiness90Day:
           type: boolean
-          example: true
           description: Utilize to only return businesses that have had business the last 90 days
         isNewBusiness:
           type: boolean
@@ -586,67 +571,56 @@ components:
         keyAggregateMerchantId:
           type: integer
           format: int64
-          example: 12077
           description: Filter results by the key aggregate merchant ID
         latitude:
           type: string
-          example: 38.778083
+          example: 38.7467
           description: Utilize to only return businesses at the selected latitude
         legalCorporateName:
           type: string
-          example: BROWN SHOE COMPANY INC
           description: The legal corporate name for the desired location
         locationId:
           type: integer
           format: int64
-          example: 300945305
           description: Filter results by the Location ID
         longitude:
           type: string
-          example: -90.699706
+          example: -90.7464
           description: Utilize to only return businesses at the selected longitude
         mccCode:
           type: string
-          example: '5661'
           description: Filter results by the Merchant Category Code
         merchantName:
           type: string
-          example: 'FAMOUSFOOTWEAR#1749'
           description: The merchant name for the desired location
         msaCode:
           type: string
-          example: '7040'
           description: Filter results by the MSA code
         naicsCode:
           type: string
-          example: '448210'
           description: Filter results by the NAICS code
         parentAggregateMerchantId:
           type: string
-          example: '10002109'
           description: Filter results by the parent aggregate merchant ID
         parentAggregateMerchantName:
           type: string
-          example: 'CALERES INC'
           description: Filter results by the parent aggregate merchant name
         postalCode:
           type: string
           description: The postal code for the desired location
         primaryChannelOfDistribution:
           type: string
-          example: B
           description: 'Utilize to only return businesses that utilize Brick and Mortar or Web as their primary channel. O = Online / Ecommerce, B = Brick & Mortar, N = Non-Store Retail'
+          example: 'B'
         stateProvinceCode:
           type: string
           example: 'MO'
           description: The state for the desired location
         streetAddress:
           type: string
-          example: '2254 HWY K'
           description: The street address for the desired location
         superIndustry:
           type: string
-          example: AAP
           description: The super industry for the desired location
         telephoneNumber:
           type: string

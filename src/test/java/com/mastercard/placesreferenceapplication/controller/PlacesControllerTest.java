@@ -3,8 +3,17 @@ package com.mastercard.placesreferenceapplication.controller;
 import com.mastercard.placesreferenceapplication.services.PlaceService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.openapitools.client.ApiException;
+import org.openapitools.client.model.MerchantCategoryCode;
+import org.openapitools.client.model.PagedMerchantCategoryCode;
+import org.openapitools.client.model.MerchantIndustryCode;
+import org.openapitools.client.model.PagedMerchantIndustryCode;
+import org.openapitools.client.model.PlaceInfo;
+import org.openapitools.client.model.PlaceFilter;
+import org.openapitools.client.model.PagedPlaceInfo;
 import org.openapitools.client.model.PlaceSearchRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -13,7 +22,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -29,7 +43,7 @@ public class PlacesControllerTest {
     private MockMvc mvc;
 
     @Test
-    public void testGetIndexPage() throws Exception {
+    public void testIndexPage() throws Exception {
         mvc.perform(get("/")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(status().isOk())
@@ -37,96 +51,140 @@ public class PlacesControllerTest {
     }
 
     @Test
-    public void testGetMccCodes_successfulRequest() throws Exception {
-        mvc.perform(get("/getMccCodes")
+    public void testMerchantCategoryCodes_successfulRequest() throws Exception {
+        PagedMerchantCategoryCode mockedReturn = new PagedMerchantCategoryCode();
+        mockedReturn.setTotal(1000);
+        given(mockPlaceService.getMerchantCategoryCodes(anyInt(), anyInt())).willReturn(mockedReturn);
+
+        mvc.perform(get("/places/merchantCategoryCodes")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
-                .andExpect(MockMvcResultMatchers.flash().attribute("success", "Merchant Category Codes retrieved successfully!"));
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("total").value(1000));
     }
 
     @Test
-    public void testGetMccCodes_ErrorHandling() throws Exception {
-        doThrow(new ApiException("Something went wrong")).when(mockPlaceService).getMccCodes(anyInt(), anyInt(),anyString());
-        mvc.perform(get("/getMccCodes")
+    public void testMerchantCategoryCodes_ErrorHandling() throws Exception {
+        doThrow(new ApiException(400, "Something went wrong")).when(mockPlaceService).getMerchantCategoryCodes(anyInt(), anyInt());
+        mvc.perform(get("/places/merchantCategoryCodes")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
-                .andExpect(flash().attribute("error", "Something went wrong"));
-    }
-    @Test
-    public void testGetMccByCode_successfulRequest() throws Exception {
-        mvc.perform(get("/getMccByCode")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param("mccCode", "0001"))
-                .andExpect(MockMvcResultMatchers.flash().attribute("success", "Category Name retrieved successfully!"));
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Something went wrong"));
     }
 
     @Test
-    public void testGetMccByCode_ErrorHandling() throws Exception {
-        doThrow(new ApiException("Something went wrong")).when(mockPlaceService).getMccByCode(anyString());
-        mvc.perform(get("/getMccByCode")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param("mccCode", "0001"))
-                .andExpect(flash().attribute("error", "Something went wrong"));
+    public void testMerchantCategoryByCode_successfulRequest() throws Exception {
+        MerchantCategoryCode mockedReturn = new MerchantCategoryCode();
+        mockedReturn.setMerchantCategoryName("Mocked Category");
+        given(mockPlaceService.getMerchantCategoryByCode(anyString())).willReturn(mockedReturn);
+
+        mvc.perform(get("/places/merchantCategoryCodes/12345")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("merchantCategoryName").value("Mocked Category"));
     }
 
     @Test
-    public void testGetIndustryCodes_successfulRequest() throws Exception {
-        mvc.perform(get("/getIndustryCodes")
+    public void testMerchantCategoryByCode_ErrorHandling() throws Exception {
+        doThrow(new ApiException(400, "Something went wrong")).when(mockPlaceService).getMerchantCategoryByCode(anyString());
+        mvc.perform(get("/places/merchantCategoryCodes/1234")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
-                .andExpect(MockMvcResultMatchers.flash().attribute("success", "Industry Codes retrieved successfully!"));
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Something went wrong"));
     }
 
     @Test
-    public void testGetIndustryCodes_ErrorHandling() throws Exception {
-        doThrow(new ApiException("Something went wrong")).when(mockPlaceService).getIndustryCodes(anyInt(), anyInt(), anyString());
-        mvc.perform(get("/getIndustryCodes")
+    public void testMerchantIndustryCodes_successfulRequest() throws Exception {
+        PagedMerchantIndustryCode mockedReturn = new PagedMerchantIndustryCode();
+        mockedReturn.setTotal(1000);
+        given(mockPlaceService.getMerchantIndustryCodes(anyInt(), anyInt())).willReturn(mockedReturn);
+
+        mvc.perform(get("/places/merchantIndustryCodes")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
-                .andExpect(flash().attribute("error", "Something went wrong"));
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("total").value(1000));
+    }
+
+    @Test
+    public void testMerchantIndustryCodes_ErrorHandling() throws Exception {
+        doThrow(new ApiException(400, "Something went wrong")).when(mockPlaceService).getMerchantIndustryCodes(anyInt(), anyInt());
+        mvc.perform(get("/places/merchantIndustryCodes")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Something went wrong"));
     }
 
     @Test
     public void testGetIndustryByCode_successfulRequest() throws Exception {
-        mvc.perform(get("/getIndustryByCode")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param("industryCode", "ACC"))
-                .andExpect(MockMvcResultMatchers.flash().attribute("success", "Industry Name retrieved successfully!"));
+        MerchantIndustryCode mockedReturn = new MerchantIndustryCode();
+        mockedReturn.setIndustry("Mocked Industry");
+        given(mockPlaceService.getMerchantIndustryByCode(anyString())).willReturn(mockedReturn);
+
+        mvc.perform(get("/places/merchantIndustryCodes/ACC")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("industry").value("Mocked Industry"));
     }
 
     @Test
     public void testGetIndustryByCode_ErrorHandling() throws Exception {
-        doThrow(new ApiException("Something went wrong")).when(mockPlaceService).getIndustryByCode(anyString());
-        mvc.perform(get("/getIndustryByCode")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param("industryCode", "ACC"))
-                .andExpect(flash().attribute("error", "Something went wrong"));
+        doThrow(new ApiException(400, "Something went wrong")).when(mockPlaceService).getMerchantIndustryByCode(anyString());
+        mvc.perform(get("/places/merchantIndustryCodes/ACC")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Something went wrong"));
     }
 
 
     @Test
-    public void testGetLocationDetails_successfulRequest() throws Exception {
-        mvc.perform(get("/getLocationDetails")
+    public void testLocationDetailsByLocationId_successfulRequest() throws Exception {
+        PlaceInfo mockedReturn = new PlaceInfo();
+        mockedReturn.setLocationId(123456789L);
+        given(mockPlaceService.getPlaceDetailsByLocationId(anyLong())).willReturn(mockedReturn);
+
+        mvc.perform(get("/places/123456789")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
-                .andExpect(MockMvcResultMatchers.flash().attribute("success", "Place retrieved successfully!"));
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("locationId").value(123456789L));
     }
 
     @Test
-    public void testGetLocationDetails_ErrorHandling() throws Exception {
-        doThrow(new ApiException("Something went wrong")).when(mockPlaceService).getLocationDetails(anyLong());
-        mvc.perform(get("/getLocationDetails")
+    public void testLocationDetailsByLocationId_ErrorHandling() throws Exception {
+        doThrow(new ApiException(400, "Something went wrong")).when(mockPlaceService).getPlaceDetailsByLocationId(anyLong());
+        mvc.perform(get("/places/123456789")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
-                .andExpect(flash().attribute("error", "Something went wrong"));
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Something went wrong"));
     }
 
     @Test
-    public void testPostPlacesSearch_successfulRequest() throws Exception {
-        mvc.perform(get("/postPlacesSearch")
+    public void testPlacesSearch_successfulRequest() throws Exception {
+        PlaceFilter placeFilter = new PlaceFilter();
+        placeFilter.setLongitude("1.0");
+        placeFilter.setLatitude("1.0");
+        placeFilter.setCountryCode("US");
+        PlaceSearchRequest placeSearchRequest = new PlaceSearchRequest();
+        placeSearchRequest.setPlace(placeFilter);
+        placeSearchRequest.setDistance(5L);
+        placeSearchRequest.setRadiusSearch(true);
+        placeSearchRequest.setUnit(PlaceSearchRequest.UnitEnum.KM);
+
+        PagedPlaceInfo mockedReturn = new PagedPlaceInfo();
+        mockedReturn.setTotal(1000);
+
+        given(mockPlaceService.getPlacesSearch(placeSearchRequest, 20, 0)).willReturn(mockedReturn);
+
+        mvc.perform(get("/places/search?latitude=1.0&longitude=1.0&distanceUnit=KM&country=US")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
-                .andExpect(MockMvcResultMatchers.flash().attribute("success", "Places Search retrieved successfully!"));
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("total").value(1000));
     }
 
     @Test
-    public void testPostPlacesSearch_ErrorHandling() throws Exception {
-        doThrow(new ApiException("Something went wrong")).when(mockPlaceService).postPlacesSearch(any(PlaceSearchRequest.class), anyInt(), anyInt());
-        mvc.perform(get("/postPlacesSearch")
+    public void testPlacesSearch_ErrorHandling() throws Exception {
+        doThrow(new ApiException(400, "Something went wrong")).when(mockPlaceService).getPlacesSearch(any(PlaceSearchRequest.class), anyInt(), anyInt());
+        mvc.perform(get("/places/search?latitude=1.0&longitude=1.0&distanceUnit=KM&country=US")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
-                .andExpect(flash().attribute("error", "Something went wrong"));
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Something went wrong"));
     }
 }
