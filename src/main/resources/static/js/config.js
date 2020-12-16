@@ -34,7 +34,7 @@ const AppConfig = (function(navigator) {
     country: 'US',
     defaultLocation: {lat: 38.7463959, lng: -90.7475983}, // default to O'Fallon, MO
     zoomLevel: 19,
-    distanceUnit: language === 'en-US' ? 'MILE' : 'KILOMETER'
+    distanceUnit: language === 'en-US' ? 'MILE' : 'KM'
   };
 })(window.navigator);
 
